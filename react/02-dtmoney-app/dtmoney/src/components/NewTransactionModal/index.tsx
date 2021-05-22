@@ -13,7 +13,7 @@ interface NewTransactionModalProps {
 }
 
 export function NewTransactionModal({ isOpen, onRequestClose }: NewTransactionModalProps) {
-    const [typeTransiction, setTypeTransiction] = useState('deposit')
+    const [typeTransaction, setTypeTransaction] = useState('deposit')
 
     return (
         <Modal 
@@ -47,8 +47,9 @@ export function NewTransactionModal({ isOpen, onRequestClose }: NewTransactionMo
             <TransactionTypeContainer>
                 <RadioBox
                 type="button"
-                onClick={() => {setTypeTransiction('deposit')}}
-                isActive={typeTransiction === 'deposit'}
+                onClick={() => setTypeTransaction('deposit')}
+                isActive={typeTransaction === 'deposit'}
+                activeColor={'green'}
                 >
 
                     <img src={incomeImg} alt="Entrada" />
@@ -59,8 +60,9 @@ export function NewTransactionModal({ isOpen, onRequestClose }: NewTransactionMo
 
                 <RadioBox 
                 type="button"
-                onClick={() => {setTypeTransiction('withdraw')}}
-                isActive={typeTransiction === 'withdraw'}
+                onClick={() => setTypeTransaction('withdraw')}
+                isActive={typeTransaction === 'withdraw'}
+                activeColor={'red'}
                 >
                     <img src={outcomeImg} alt="Saída" />
                     <span>
