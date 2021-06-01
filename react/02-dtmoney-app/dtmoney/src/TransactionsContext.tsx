@@ -4,7 +4,7 @@ import { api } from './services/api'
 interface Transaction {
     id: number;
     title: string;
-    type: string;
+    typeTransaction: string;
     category: string;
     amount: number;
     createdAt: string;
@@ -15,14 +15,16 @@ interface TransactionsProviderProps {
 }
 
 interface TransactionContextData {
-    transactions: [];
+    transactions: Transaction[];
     createTransaction: (transaction: TransactionInput) => void
 }
 
 type TransactionInput = Omit<Transaction, 'id' | 'createdAt'>
 
 
-export const TransactionsContext = createContext<Transaction[]>([])
+export const TransactionsContext = createContext<TransactionContextData>(
+   {} as TransactionContextData
+)
 
 export function TransactionsProvider({children}: TransactionsProviderProps) {
     const [transactions, setTransactions] = useState<Transaction[]>([])
