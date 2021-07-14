@@ -3,55 +3,54 @@ import { Readable } from 'stream'
 import { stripe } from '../../services/stripe'
 import Stripe from 'stripe'
 
-// async function buffer(readable: Readable) {
-//   const chunks = []
+async function buffer(readable: Readable) {
+  const chunks = [];
 
-//   for await(const chunk of readable) {
-//     chunks.push(
-//       typeof chunk === 'string' ? Buffer.from(chunk) : chunk
-//     )
-//   }
+  for await(const chunk of readable) {
+    chunks.push(
+      typeof chunk === 'string' ? Buffer.from(chunk) : chunk
+    );
+  }
 
-//   return Buffer.concat(chunks)
-// }
+  return Buffer.concat(chunks);
+}
 
-// export const config = {
-//   api: {
-//     bodyParse: false
-//   }
-// }
+//disable default config of next request
+//Next has a default type of request and we need to desable that
+//by default Next request are able to accept only Json or form
+//end we have to change that behavior to receve strem as string/object 
+export const config = {
+  api: {
+    bodyParser: false
+  }
+}
 
-// const relevantEvents = new Set([
-//   'checkout.session.completed'
-// ])
+const relevantEvents = new Set([
+  'checkout.session.completed'
+])
 
 export default async (req:NextApiRequest, res:NextApiResponse) => {
-  // if(req.method === 'POST'){
-  //   const buf = await buffer(req)
-  //   const secret = req.headers['stripe-signature']
+  if(req.method === 'POST') {
+    const buf = await buffer(req)
+    const secret = req.headers['stripe-signature']
 
-  //   //here comes the stripe events of the webhooks
-  //   let event: Stripe.Event
+    let event: Stripe.Event
 
-  //   try {
-  //     event = stripe.webhooks.constructEvent(buf, secret, process.env.STRIPE_WEBHOOK_SECRET)
-  //   } catch (err) {
-  //     return res.status(400).send(`Webhook error ${err.message}`)
-  //   }
+    try {
+      event = stripe.webhooks.constructEvent(buf, secret, process.env.STRIPE_WEBHOOK_SECRET)
+    } catch (err) {
+      res.status(400).send(`Webhook error ${err.message}`)
+    }
 
-  //   const { type } = event
+    const { type } = event
 
-  //   if(relevantEvents.has(type)) {
-  //     console.log('evento recebido', event)
-  //   }
-
-
-
-  //   res.json({ recived: true })
-  // } else {
-  //   res.setHeader('Allow', 'POST')
-  //   res.status(405).end('Method not allowed')
-  // }
-  
-
+    if(relevantEvents.has(type)) {
+      console.log('Evento recebido', event)
+    }
+    
+    res.json({ recived: true })
+  } else {
+    res.setHeader('Allow', 'POST')
+    res.status(405).end('Method not allowed')
+  }
 }
