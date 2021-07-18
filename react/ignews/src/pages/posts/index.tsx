@@ -1,5 +1,6 @@
 import { GetStaticProps } from 'next'
 import { getPrismicClient } from '../../services/prismic'
+import { RichText } from 'prismic-dom'
 
 import Prismic from '@prismicio/client'
 import Head from 'next/head'
@@ -7,7 +8,18 @@ import Head from 'next/head'
 
 import styles from './styles.module.scss'
 
-export default function Posts() {
+type Post = {
+  slug: string,
+  title: string,
+  excerpt: string,
+  updatedAt: string
+}
+
+interface PostsProps {
+  posts: Post[]
+}
+
+export default function Posts({posts}: PostsProps) {
   return (
     <>
       <Head>
@@ -16,27 +28,13 @@ export default function Posts() {
 
       <main className={styles.container}>
         <div className={styles.posts}>
-          <a href="#">
-            <time>10 de Abril 2021 </time>
-            <strong>Next.JS - Novidades na versão 10 e atualização do blog para melhorar a performance</strong>
-            <p>
-            Se você nos acompanhou nos últimos posts, já viu que criamos um blog com um contador de visitas usando o MongoDB e Next.js, depois adicionamos a funcionalidade de dark mode.
-            </p>
-          </a>
-          <a href="#">
-            <time>10 de Abril 2021 </time>
-            <strong>Next.JS - Novidades na versão 10 e atualização do blog para melhorar a performance</strong>
-            <p>
-            Se você nos acompanhou nos últimos posts, já viu que criamos um blog com um contador de visitas usando o MongoDB e Next.js, depois adicionamos a funcionalidade de dark mode.
-            </p>
-          </a>
-          <a href="#">
-            <time>10 de Abril 2021 </time>
-            <strong>Next.JS - Novidades na versão 10 e atualização do blog para melhorar a performance</strong>
-            <p>
-            Se você nos acompanhou nos últimos posts, já viu que criamos um blog com um contador de visitas usando o MongoDB e Next.js, depois adicionamos a funcionalidade de dark mode.
-            </p>
-          </a>
+          { posts.map(post => (
+            <a key={post.slug} href="#">
+              <time>{post.updatedAt}</time>
+              <strong>{post.title}</strong>
+              <p>{post.excerpt}</p>
+            </a>
+          )) }
         </div>
       </main>
     </>
@@ -54,9 +52,22 @@ export const getStaticProps: GetStaticProps = async () => {
     pageSize: 100
   })
 
-  console.log(JSON.stringify(response, null, 2))
+  const posts = response.results.map(post => {
+    return {
+      slug: post.uid,
+      title: RichText.asText(post.data.title),
+      excerpt: post.data.content.find(content => content.type === 'paragraph')?.text ?? '',
+      updatedAt: new Date(post.last_publication_date).toLocaleDateString('pt-BR', {
+        day: '2-digit',
+        month: 'long',
+        year: 'numeric'
+      })
+    }
+  })
 
   return {
-    props: {}
+    props: {
+      posts
+    }
   } 
 }
