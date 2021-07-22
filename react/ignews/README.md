@@ -4,11 +4,11 @@
 
 
 <h1 align="center">
-    <img src="./public/images/home-ignews.png" width="300px">
-    <img src="./public/images/posts-ignews.png" width="300px"> 
-    <img src="./public/images/post-ignews.png" width="300px"> 
-    <img src="./public/images/post-preview-ignews.png" width="300px">
-    <img src="./public/images/stripe-ignews.png" width="300px">  
+    <img src="./public/images/home-ignews.png" width="400px">
+    <img src="./public/images/posts-ignews.png" width="400px"> 
+    <img src="./public/images/post-ignews.png" width="400px"> 
+    <img src="./public/images/post-preview-ignews.png" width="400px">
+    <img src="./public/images/stripe-ignews.png" width="400px">  
 </h1>
 
 ## 🏷️ Sobre 
