@@ -14,6 +14,7 @@
 ## 🏷️ Sobre 
 **Ig.news** é uma plataforma de assinatura paga para quem gosta de consumir artigos e posts sobre assuntos diversos.
 Enquanto o usuário assinante pode consumir quantos posts ele quiser, o usuário não assinante tem apenas uma prévia do post que deseja acessar.
+
 ---
 
 ## 🛠️ Tecnologias utilizadas
