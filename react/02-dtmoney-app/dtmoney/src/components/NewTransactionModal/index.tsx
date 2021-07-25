@@ -1,6 +1,6 @@
-import { useState, useContext, FormEvent } from 'react'
+import { useState, FormEvent } from 'react'
 import Modal from 'react-modal'
-import { useTransactions } from '../../hooks/useStransactions' 
+import { useTransactions } from '../../hooks/useTransactions' 
 
 import { Container } from './styles'
 import { TransactionTypeContainer, RadioBox } from './styles'

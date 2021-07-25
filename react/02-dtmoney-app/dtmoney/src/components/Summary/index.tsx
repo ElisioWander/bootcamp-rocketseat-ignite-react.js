@@ -1,4 +1,4 @@
-import { useTransactions } from '../../hooks/useStransactions'
+import { useTransactions } from '../../hooks/useTransactions'
 
 import incomeImg  from '../../assets/income.svg'
 import outcomeImg from '../../assets/outcome.svg'
