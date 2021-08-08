@@ -1,5 +1,5 @@
-import { Header } from '../Components/Header'
-import { Sidebar } from '../Components/Sidebar'
+import { Header } from '../Components/Header/index'
+import { Sidebar } from '../Components/Sidebar/index'
 import { theme } from '../styles/theme'
 
 import { Flex, SimpleGrid, Box, Text } from '@chakra-ui/react'
@@ -13,24 +13,24 @@ const Chart = dynamic(() => import('react-apexcharts'), {
 const options = {
   chart: {
     toolbar: {
-      show: false
+      show: false,
     },
     zoom: {
-      enabled: false
+      enabled: false,
     },
-    foreColor: theme.colors.gray[500]
+    foreColor: theme.colors.gray[500],
   },
   grid: {
-    show: false
+    show: false,
   },
   dataLabels: {
-    enabled: false
+    enabled: false,
   },
   tooltip: {
-    enabled: false
+    enabled: false,
   },
   xaxis: {
-    type: 'datetime',
+    type: 'datetime' as const,
     axisBorder: {
       color: theme.colors.gray[600]
     },
@@ -38,19 +38,28 @@ const options = {
       color: theme.colors.gray[600]
     },
     categories: [
-      '2021-03-18T00:00:00.000Z',
-      '2021-03-19T00:00:00.000Z',
-      '2021-03-20T00:00:00.000Z',
-      '2021-03-21T00:00:00.000Z',
-      '2021-03-22T00:00:00.000Z',
-      '2021-03-23T00:00:00.000Z',
-      '2021-03-24T00:00:00.000Z',
-    ]
-  }
-}
+      '2021-08-18T00:00:00.000Z',
+      '2021-08-19T00:00:00.000Z',
+      '2021-08-20T00:00:00.000Z',
+      '2021-08-21T00:00:00.000Z',
+      '2021-08-22T00:00:00.000Z',
+      '2021-08-23T00:00:00.000Z',
+      '2021-08-24T00:00:00.000Z',
+    ],
+  },
+  fill: {
+    opacity: 0.3,
+    type: 'gradient',
+    gradient: {
+      shade: 'dark',
+      opacityFrom: 0.7,
+      opacityTo: 0.3,
+    },
+  },
+};
 
 const series = [
-  { name: 'series1', data: [120, 800, 15, 1555, 147, 598, 122] }
+  { name: 'series1', data: [31, 120, 10, 28, 61, 18, 109] }
 ]
 
 export default function Dashboard() {
@@ -69,15 +78,15 @@ export default function Dashboard() {
             bg="gray.800"
           >
             <Text fontSize="lg" mb="4" >Inscritos da semana</Text>
-            <Chart  options={options} series={series} type="area" h={160} />
+            <Chart options={options} series={series} type="area" height={160} />
           </Box>
           <Box
             p="8"
             borderRadius="8"
             bg="gray.800"
           >
-            <Text fontSize="lg" mb="4" >Inscritos da semana</Text>
-            <Chart  options={options} series={series} type="area" h={160} />
+            <Text fontSize="lg" mb="4" >Taxa de abertura</Text>
+            <Chart options={options} series={series} type="area" height={160} />
           </Box>
         </SimpleGrid>
       </Flex>
