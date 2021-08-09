@@ -1,11 +1,10 @@
-import { Box, Flex, Button, Icon, Table, Thead, Tr, Th, Tbody ,Td, Checkbox, Text } from '@chakra-ui/react'
+import { Box, Flex } from '@chakra-ui/react'
 import { Header } from '../../Components/Header/index'
 import { Sidebar } from '../../Components/Sidebar'
-import { ButtonTable } from '../../Components/Buttons/ButtonTable'
 import { Pagination } from '../../Components/Pagination'
 import { Heading } from '../../Components/Heading/index'
+import { UsersTable } from '../../Components/UsersTable/index'
 
-import { RiAddLine, RiPencilLine } from 'react-icons/ri'
 import { ButtonCreate } from '../../Components/Buttons/ButtonCreate'
 
 export default function Users() {
@@ -23,69 +22,7 @@ export default function Users() {
             <ButtonCreate />
           </Flex>
         
-          <Table colorScheme="whiteAlpha" >
-            <Thead>
-              <Tr>
-                <Th w="8" px="6" color="gray.300" >
-                  <Checkbox colorScheme="pink" />
-                </Th>
-                <Th>Usuário</Th>
-                <Th>Data de cadastro</Th>
-                <Th w="0" ></Th>
-              </Tr>
-            </Thead>
-            <Tbody>
-              <Tr>
-                <Td>
-                  <Checkbox colorScheme="pink" />
-                </Td>
-                <Td>
-                  <Box>
-                    <Text fontWeight="bold" >Elisio Wander</Text>
-                    <Text fontSize="sm" color="gray.300" >elisioDev@outlook.com</Text>
-                  </Box>
-                </Td>
-                <Td>02 de Abirl, 2021</Td>
-                <Td>
-                  <ButtonTable />
-                </Td>
-              </Tr>
-            </Tbody>
-            <Tbody>
-              <Tr>
-                <Td>
-                  <Checkbox colorScheme="pink" />
-                </Td>
-                <Td>
-                  <Box>
-                    <Text fontWeight="bold" >Elisio Wander</Text>
-                    <Text fontSize="sm" color="gray.300" >elisioDev@outlook.com</Text>
-                  </Box>
-                </Td>
-                <Td>02 de Abirl, 2021</Td>
-                <Td>
-                  <ButtonTable />
-                </Td>
-              </Tr>
-            </Tbody>
-            <Tbody>
-              <Tr>
-                <Td>
-                  <Checkbox colorScheme="pink" />
-                </Td>
-                <Td>
-                  <Box>
-                    <Text fontWeight="bold" >Elisio Wander</Text>
-                    <Text fontSize="sm" color="gray.300" >elisioDev@outlook.com</Text>
-                  </Box>
-                </Td>
-                <Td>02 de Abirl, 2021</Td>
-                <Td>
-                  <ButtonTable />
-                </Td>
-              </Tr>
-            </Tbody>
-          </Table>
+          <UsersTable />
 
           <Pagination />
         </Box>
