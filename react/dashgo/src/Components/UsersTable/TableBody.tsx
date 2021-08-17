@@ -4,14 +4,15 @@ import { ButtonTable } from '../Buttons/ButtonTable'
 interface TableBodyProps {
   name: string,
   email: string,
-  date: string
+  date: string,
+  wideVersion: boolean
 }
 
-export function TableBody({ name, email, date }: TableBodyProps) {
+export function TableBody({ name, email, date, wideVersion }: TableBodyProps) {
   return (
     <Tbody>
       <Tr>
-        <Td>
+        <Td px={["4", "4", "6"]} >
           <Checkbox colorScheme="pink" />
         </Td>
         <Td>
@@ -20,7 +21,7 @@ export function TableBody({ name, email, date }: TableBodyProps) {
             <Text fontSize="sm" color="gray.300" >{email}</Text>
           </Box>
         </Td>
-        <Td>{date}</Td>
+        { wideVersion && <Td>{date}</Td>}
         <Td>
           <ButtonTable />
         </Td>

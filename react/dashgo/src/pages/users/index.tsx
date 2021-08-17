@@ -1,4 +1,4 @@
-import { Box, Flex } from '@chakra-ui/react'
+import { Box, Flex, useBreakpointValue } from '@chakra-ui/react'
 import { Header } from '../../Components/Header/index'
 import { Sidebar } from '../../Components/Sidebar'
 import { Pagination } from '../../Components/Pagination'
@@ -7,7 +7,12 @@ import { UsersTable } from '../../Components/UsersTable/index'
 
 import { ButtonCreate } from '../../Components/Buttons/ButtonCreate'
 
-export default function Users() {
+export default function UsersList() {
+  const isWideVersion = useBreakpointValue({
+    base: false,
+    lg: true
+  })
+
   return (
     <Box>
       <Header />
@@ -22,7 +27,7 @@ export default function Users() {
             <ButtonCreate />
           </Flex>
         
-          <UsersTable />
+          <UsersTable wideVersion={isWideVersion} />
 
           <Pagination />
         </Box>
