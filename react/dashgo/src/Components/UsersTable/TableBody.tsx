@@ -1,5 +1,4 @@
 import { Tbody, Tr, Td, Checkbox, Box, Text } from '@chakra-ui/react'
-import { ButtonTable } from '../Buttons/ButtonTable'
 
 interface TableBodyProps {
   name: string,
@@ -22,9 +21,6 @@ export function TableBody({ name, email, date, wideVersion }: TableBodyProps) {
           </Box>
         </Td>
         { wideVersion && <Td>{date}</Td>}
-        <Td>
-          <ButtonTable />
-        </Td>
       </Tr>
     </Tbody>
   )
