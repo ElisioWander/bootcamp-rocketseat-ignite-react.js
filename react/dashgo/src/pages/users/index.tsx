@@ -24,7 +24,7 @@ export default function UsersList() {
           <Flex justify="space-between" align="center" mb="8" > 
             <Heading>USUÁRIOS</Heading>
 
-            <ButtonCreate />
+            <ButtonCreate href="/users/create" />
           </Flex>
         
           <UsersTable wideVersion={isWideVersion} />
