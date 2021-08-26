@@ -3,7 +3,6 @@ import { Input } from "../Components/Form/Input";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from "yup";
-import { useCallback } from "react";
 
 type SignInFormData = {
   email: string;
