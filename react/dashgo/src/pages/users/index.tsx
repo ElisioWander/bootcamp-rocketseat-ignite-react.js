@@ -1,4 +1,5 @@
 import { Box, Flex, useBreakpointValue } from '@chakra-ui/react'
+import { useEffect } from 'react'
 import { Header } from '../../Components/Header/index'
 import { Sidebar } from '../../Components/Sidebar'
 import { Pagination } from '../../Components/Pagination'
@@ -8,6 +9,13 @@ import { UsersTable } from '../../Components/UsersTable/index'
 import { ButtonCreate } from '../../Components/Buttons/ButtonCreate'
 
 export default function UsersList() {
+  useEffect(() => {
+    fetch('http://localhost:3000/api/users')
+    .then(response => response.json())
+    .then(data => console.log(data))
+  }, [])
+
+
   const isWideVersion = useBreakpointValue({
     base: false,
     lg: true
