@@ -2,6 +2,10 @@ import { extendTheme } from '@chakra-ui/react'
 
 export const theme = extendTheme({
   styles: {
+    fonts: {
+      heading: 'Estonia',
+      body: 'Estonia',
+    },
     colors: {
       gray: {
         "900": "#181B23",
