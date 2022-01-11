@@ -16,7 +16,7 @@ import {
   Spinner,
 } from "@chakra-ui/react";
 import Link from "next/link";
-import { RiAddLine } from "react-icons/ri";
+import { RiAddLine, RiRefreshLine } from "react-icons/ri";
 import { Header } from "../../Components/Header/Index";
 import { Pagination } from "../../Components/Pagination/Index";
 import { Sidebar } from "../../Components/Sidebar/Index";
@@ -25,7 +25,7 @@ import { useQuery } from "react-query";
 
 export default function UserList() {
   //"users" é a chave para fazer uma modificação nos dados em cash
-  const { data, isLoading, error } = useQuery("users", async () => {
+  const { data, isLoading, isFetching, refetch, error } = useQuery("users", async () => {
     const response = await fetch("http://localhost:3000/api/users"); //fazendo a requisição para o backend
     const data = await response.json(); //transformando os dados em json
 
@@ -40,10 +40,16 @@ export default function UserList() {
           year: 'numeric'
         }),
       };
-    });
+    },);
 
     return users;
+  }, {
+    staleTime: 1000 * 5 // 5 segundos //staleTime faz com que os dados levem determinado tempo para ficarem obsoletos(stale)
   });
+
+  const handleRefetch = () => {
+    refetch()
+  }
 
   const wideVersion = useBreakpointValue({
     base: false,
@@ -61,18 +67,32 @@ export default function UserList() {
           <Flex mb="8" justify="space-between" align="center">
             <Heading size="lg" fontWeight="normal">
               Usuários
+              { !isLoading && isFetching && <Spinner fontSize="sm" color="gray.500" ml="4" /> }
             </Heading>
-            <Link href="/users/create" passHref>
+            <Box>
               <Button
-                as="a"
                 size="sm"
-                fontSize="sm"
-                colorScheme="pink"
-                leftIcon={<Icon as={RiAddLine} fontSize="20" />}
+                bgColor="transparent"
+                mr="4"
+                _hover={{
+                  color: "pink"
+                }}
+                onClick={handleRefetch}
               >
-                Criar Novo
+                <Icon as={RiRefreshLine} fontSize="20" />
               </Button>
-            </Link>
+              <Link href="/users/create" passHref>
+                <Button
+                  as="a"
+                  size="sm"
+                  fontSize="sm"
+                  colorScheme="pink"
+                  leftIcon={<Icon as={RiAddLine} fontSize="20" />}
+                >
+                  Criar Novo
+                </Button>
+              </Link>
+            </Box>
           </Flex>
 
           {isLoading ? (

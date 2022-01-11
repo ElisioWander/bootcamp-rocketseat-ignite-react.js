@@ -4,6 +4,7 @@ import { theme } from '../styles/theme'
 import { SidebarDrawerProvider } from '../Components/contexts/SidebarDrawerContext'
 import { makeServer } from '../services/mirage'
 import { QueryClient, QueryClientProvider } from 'react-query'
+import { ReactQueryDevtools } from 'react-query/devtools'
 
 //verificar se está em estado de desenvolvimento, e se caso estiver, iniciar o servidor do MirageJs
 if (process.env.NODE_ENV === 'development') {
@@ -19,6 +20,8 @@ function MyApp({ Component, pageProps }: AppProps) {
         <SidebarDrawerProvider>
           <Component {...pageProps} />   
         </SidebarDrawerProvider>
+        
+        <ReactQueryDevtools />
       </QueryClientProvider>
     </ChakraProvider>
   )
