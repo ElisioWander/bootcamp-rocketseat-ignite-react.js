@@ -16,36 +16,20 @@ import {
   Spinner,
 } from "@chakra-ui/react";
 import Link from "next/link";
-import { RiAddLine, RiRefreshLine } from "react-icons/ri";
+import { RiAddLine } from "react-icons/ri";
 import { Header } from "../../Components/Header/Index";
 import { Pagination } from "../../Components/Pagination/Index";
 import { Sidebar } from "../../Components/Sidebar/Index";
 
-import { useQuery } from "react-query";
+import { RefetchButton } from "../../Components/Buttons/RefetchButton";
+import { useUsers } from "../../services/hooks/useUsers";
 
 export default function UserList() {
   //"users" é a chave para fazer uma modificação nos dados em cash
-  const { data, isLoading, isFetching, refetch, error } = useQuery("users", async () => {
-    const response = await fetch("http://localhost:3000/api/users"); //fazendo a requisição para o backend
-    const data = await response.json(); //transformando os dados em json
-
-    const users = data.users.map(user => {
-      return {
-        id: user.id,
-        name: user.name,
-        email: user.email,
-        createdAt: new Date(user.createdAt).toLocaleDateString('pt-BR', {
-          day: '2-digit',
-          month: 'long',
-          year: 'numeric'
-        }),
-      };
-    },);
-
-    return users;
-  }, {
-    staleTime: 1000 * 5 // 5 segundos //staleTime faz com que os dados levem determinado tempo para ficarem obsoletos(stale)
-  });
+  const { data, isLoading, isFetching, refetch, error } = useUsers()// foi feita a criação do hook
+  //useUsers para facilitar a manutenção e a utilização desta funcionalidade em outras partes da
+  //aplicação
+  //mais informações documentadas estão no componente useUsers
 
   const handleRefetch = () => {
     refetch()
@@ -70,17 +54,7 @@ export default function UserList() {
               { !isLoading && isFetching && <Spinner fontSize="sm" color="gray.500" ml="4" /> }
             </Heading>
             <Box>
-              <Button
-                size="sm"
-                bgColor="transparent"
-                mr="4"
-                _hover={{
-                  color: "pink"
-                }}
-                onClick={handleRefetch}
-              >
-                <Icon as={RiRefreshLine} fontSize="20" />
-              </Button>
+              <RefetchButton handleRefetch={handleRefetch} />
               <Link href="/users/create" passHref>
                 <Button
                   as="a"
