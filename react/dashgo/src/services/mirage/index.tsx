@@ -1,5 +1,5 @@
-import { createServer, Factory, Model } from "miragejs";
-import faker from 'faker'
+import { createServer, Factory, Model, Response } from "miragejs";
+import faker from "faker";
 
 type User = {
   name: string;
@@ -17,20 +17,20 @@ export function makeServer() {
     factories: {
       user: Factory.extend({
         name(i: number) {
-          return `User ${i + 1}`
+          return `User ${i + 1}`;
         },
         email() {
-          return faker.internet.email().toLowerCase()
+          return faker.internet.email().toLowerCase();
         },
         createdAt() {
-          return faker.date.recent(10)
+          return faker.date.recent(10);
         },
       }),
     },
 
     //gerar 200 dados referente a tabela user
     seeds(server) {
-      server.createList('user', 10 )
+      server.createList("user", 10);
     },
 
     //routes é o sistema de rotas que o MirageJS providencia para simular um sistema de rotas de um
@@ -39,7 +39,7 @@ export function makeServer() {
       //para que as rotas sejam chamadas de forma correta é necessário definir um "namespace"
       //nesse caso é "api"
       //http://api/users
-      this.namespace = 'api'
+      this.namespace = "api";
 
       //timing vai fazer com que todas as chamadas que forem feita para o backend demore
       //750 milissegundos para acontecer
@@ -47,17 +47,40 @@ export function makeServer() {
       this.timing = 750;
 
       //verbos https para listagem e criação
-      this.get("/users");
+      this.get("/users", function (schema, request) {
+        const { page = 1, per_page = 10 } = request.queryParams;
+
+        //pegar o total de registros existentes
+        const total = schema.all("user").length;
+
+        //a página selecionada * a quantidade de registro por página vai te dar o valor que a página vai iniciar
+        //é necessário colocar o -1 em page para que o registro comece na página 0 e não na 10
+        const pageStart = (Number(page) - 1) * Number(per_page);
+
+        //página inicial + quantidade de registro por página vai ter dar qual será o valor do último registro da página
+        const pageEnd = Number(pageStart) + Number(per_page);
+
+        const users = this.serialize(schema.all("user")).users.slice(
+          pageStart,
+          pageEnd
+        );
+
+        return new Response(
+          200, //número de registros,
+          { "x-total-count": String(total) }, //número total de registros que foram buscados
+          { users } //listagem de usuários da página específica
+        );
+      });
       this.post("/users");
 
       //para não interferir no sistema de rotas que o Next tem dentro de sua pasta "pages/api"
       //é necessário alterar o namespace para outra coisa ou limpar o namespace depois que a rota foi chamada
-      this.namespace = ''
+      this.namespace = "";
 
       //o método passthrough vai fazer com que todas as chamadas que possui "api" seja detectada
       //pelas rotas do Mirage, e caso não seje detectada, isso fará com que passe adiante caso
       //exista outra função, outra rota que tenha "api", e ela possa funcionar sem interferência
-      this.passthrough()
+      this.passthrough();
     },
   });
 
