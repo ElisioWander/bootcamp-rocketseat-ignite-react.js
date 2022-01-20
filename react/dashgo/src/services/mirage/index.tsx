@@ -30,7 +30,7 @@ export function makeServer() {
 
     //gerar 200 dados referente a tabela user
     seeds(server) {
-      server.createList("user", 10);
+      server.createList("user", 200);
     },
 
     //routes é o sistema de rotas que o MirageJS providencia para simular um sistema de rotas de um
@@ -71,6 +71,7 @@ export function makeServer() {
           { users } //listagem de usuários da página específica
         );
       });
+      this.get("/users:id");
       this.post("/users");
 
       //para não interferir no sistema de rotas que o Next tem dentro de sua pasta "pages/api"

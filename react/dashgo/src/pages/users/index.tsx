@@ -14,8 +14,9 @@ import {
   Checkbox,
   useBreakpointValue,
   Spinner,
+  Link,
 } from "@chakra-ui/react";
-import Link from "next/link";
+import NextLink from "next/link";
 import { RiAddLine } from "react-icons/ri";
 import { Header } from "../../Components/Header/Index";
 import { Pagination } from "../../Components/Pagination/Index";
@@ -23,16 +24,31 @@ import { Sidebar } from "../../Components/Sidebar/Index";
 
 import { RefetchButton } from "../../Components/Buttons/RefetchButton";
 import { useUsers } from "../../services/hooks/useUsers";
+import { useState } from "react";
+import { queryClient } from "../../services/queryClient";
+import { api } from "../../services/api";
 
 export default function UserList() {
+  const [page, setPage] = useState(1);
+
   //"users" é a chave para fazer uma modificação nos dados em cash
-  const { data, isLoading, isFetching, refetch, error } = useUsers()// foi feita a criação do hook
+  const { data, isLoading, isFetching, refetch, error } = useUsers(page); // foi feita a criação do hook
   //useUsers para facilitar a manutenção e a utilização desta funcionalidade em outras partes da
   //aplicação
   //mais informações documentadas estão no componente useUsers
 
   const handleRefetch = () => {
-    refetch()
+    refetch();
+  };
+
+  async function handlePrefetchUser(userId: number) {
+    await queryClient.prefetchQuery(["user", userId], async () => {
+      const response = await api.get(`users/${userId}`);
+
+      return response.data;
+    }, {
+      staleTime: 1000 * 60 * 10
+    });
   }
 
   const wideVersion = useBreakpointValue({
@@ -51,11 +67,13 @@ export default function UserList() {
           <Flex mb="8" justify="space-between" align="center">
             <Heading size="lg" fontWeight="normal">
               Usuários
-              { !isLoading && isFetching && <Spinner fontSize="sm" color="gray.500" ml="4" /> }
+              {!isLoading && isFetching && (
+                <Spinner fontSize="sm" color="gray.500" ml="4" />
+              )}
             </Heading>
             <Box>
               <RefetchButton handleRefetch={handleRefetch} />
-              <Link href="/users/create" passHref>
+              <NextLink href="/users/create" passHref>
                 <Button
                   as="a"
                   size="sm"
@@ -65,7 +83,7 @@ export default function UserList() {
                 >
                   Criar Novo
                 </Button>
-              </Link>
+              </NextLink>
             </Box>
           </Flex>
 
@@ -91,7 +109,7 @@ export default function UserList() {
                   </Tr>
                 </Thead>
                 <Tbody>
-                  {data.map(user => {
+                  {data.users.map((user) => {
                     return (
                       <Tr key={user.id}>
                         <Td px={["4", "4", "6"]}>
@@ -99,7 +117,12 @@ export default function UserList() {
                         </Td>
                         <Td>
                           <Box>
-                            <Text fontWeight="bold">{user.name}</Text>
+                            <Link
+                              color="purple.400"
+                              onMouseEnter={() => handlePrefetchUser(user.id)}
+                            >
+                              <Text fontWeight="bold">{user.name}</Text>
+                            </Link>
                             <Text fontSize="sm" color="gray.300">
                               {user.email}
                             </Text>
@@ -112,7 +135,11 @@ export default function UserList() {
                 </Tbody>
               </Table>
 
-              <Pagination  totalCountOfRegisters={200} currentPage={10} onPageChange={() => {}} />
+              <Pagination
+                totalCountOfRegisters={data.totalCount}
+                currentPage={page}
+                onPageChange={setPage}
+              />
             </>
           )}
         </Box>

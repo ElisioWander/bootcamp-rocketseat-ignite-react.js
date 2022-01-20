@@ -8,11 +8,22 @@ type User = {
   createdAt: string;
 }
 
+type GetUsersResponse = {
+  totalCount: number;
+  users: User[];
+}
+
 //foi necessário desacoplar a função de pegar os dados dos usuários do React-Query para que
 //se for preciso utilizar a função de pegar os dados dos usuários novamente sem a necessidade 
 //de utilizar o React-Query, isso possa ser feito.
-export async function getUsers(): Promise<User[]>{
-  const { data } = await api.get("/users");
+export async function getUsers(page: number): Promise<GetUsersResponse>{
+  const { data, headers } = await api.get("users", {
+    params: {
+      page,
+    }
+  });
+
+  const totalCount = Number(headers['x-total-count'])
 
   const users = data.users.map(user => {
     return {
@@ -27,12 +38,15 @@ export async function getUsers(): Promise<User[]>{
     };
   });
 
-  return users;
+  return {
+    users,
+    totalCount,
+  }
 }
 
 //aqui os dados estão guardados no cash do React-Query
-export function useUsers() {
-  return useQuery("users", getUsers, {
+export function useUsers(page: number) {
+  return useQuery(['users', page], () => getUsers(page), {
     staleTime: 1000 * 5 //segundos //dessa forma os dados ficarão fescos durante 5 segundos
   })
 }
