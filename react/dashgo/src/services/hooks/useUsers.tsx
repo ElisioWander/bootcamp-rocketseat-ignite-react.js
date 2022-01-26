@@ -47,6 +47,6 @@ export async function getUsers(page: number): Promise<GetUsersResponse>{
 //aqui os dados estão guardados no cash do React-Query
 export function useUsers(page: number) {
   return useQuery(['users', page], () => getUsers(page), {
-    staleTime: 1000 * 5 //segundos //dessa forma os dados ficarão fescos durante 5 segundos
+    staleTime: 1000 * 60 * 10 //segundos //dessa forma os dados ficarão fescos durante 10 minutos
   })
 }

@@ -71,7 +71,7 @@ export function makeServer() {
           { users } //listagem de usuários da página específica
         );
       });
-      this.get("/users:id");
+      this.get("/users/:id");
       this.post("/users");
 
       //para não interferir no sistema de rotas que o Next tem dentro de sua pasta "pages/api"

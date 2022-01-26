@@ -41,7 +41,12 @@ export default function UserList() {
     refetch();
   };
 
-  async function handlePrefetchUser(userId: number) {
+  const wideVersion = useBreakpointValue({
+    base: false,
+    lg: true,
+  });
+  
+  async function handlePrefetchUser(userId: string) {
     await queryClient.prefetchQuery(["user", userId], async () => {
       const response = await api.get(`users/${userId}`);
 
@@ -50,12 +55,6 @@ export default function UserList() {
       staleTime: 1000 * 60 * 10
     });
   }
-
-  const wideVersion = useBreakpointValue({
-    base: false,
-    lg: true,
-  });
-
   return (
     <Box>
       <Header />
