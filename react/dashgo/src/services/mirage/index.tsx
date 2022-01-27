@@ -1,4 +1,4 @@
-import { createServer, Factory, Model, Response } from "miragejs";
+import { createServer, Factory, Model, Response, ActiveModelSerializer } from "miragejs";
 import faker from "faker";
 
 type User = {
@@ -9,6 +9,9 @@ type User = {
 
 export function makeServer() {
   const server = createServer({
+    serializers: {
+      application: ActiveModelSerializer,
+    },
     models: {
       //os models são como tabelas de um banco de dados
       user: Model.extend<Partial<User>>({}), //o "Partial" faz o papel de evitar que se tenha erro por não está utilizando todas as props informadas
